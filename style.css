@@ -12,8 +12,9 @@ body {
   max-width: 320px;
   margin: 30px auto;
 }
+
 img {
-  width: 150px;
+  max-width: 80%;
   margin: 0 auto;
 }
 
