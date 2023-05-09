@@ -18,6 +18,8 @@ body {
 img {
   max-width: 90%;
   margin: 0 auto;
+  border: #ac485a 3px solid;
+  border-radius: 8px;
 }
 
 input {
