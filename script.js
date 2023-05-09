@@ -3,6 +3,8 @@ import {
   getDatabase,
   ref,
   push,
+  onValue,
+  remove,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js";
 
 const appSettings = {
@@ -16,9 +18,42 @@ const goodsInDB = ref(database, "goods");
 
 const addButton = document.querySelector("#add-button");
 const inputField = document.querySelector("#input-field");
+const shoppingList = document.querySelector("#shopping-list");
 
 addButton.addEventListener("click", () => {
   const inputValue = inputField.value;
-  push(goodsInDB, inputValue);
-  console.dir(`${inputValue} added to database`);
+  if (inputValue.trim().length > 0) {
+    clearInputFieldEl();
+    push(goodsInDB, inputValue);
+  }
+  clearInputFieldEl();
 });
+
+onValue(goodsInDB, (snapshot) => {
+  clearShoppinngList();
+
+  const goodsEntries = Object.entries(snapshot.val());
+
+  for (let i = 0; i < goodsEntries.length; i++) {
+    appendItemToSoppingList(goodsEntries[i]);
+  }
+});
+
+function clearInputFieldEl() {
+  inputField.value = "";
+}
+
+function clearShoppinngList() {
+  shoppingList.innerHTML = "";
+}
+
+function appendItemToSoppingList(goodsEntries) {
+  const [id, value] = goodsEntries;
+  const newLiEl = document.createElement("li");
+  newLiEl.textContent = value;
+  shoppingList.append(newLiEl);
+  newLiEl.addEventListener("click", () => {
+    const locationOfGoodsInDB = ref(database, `goods/${id}`);
+    remove(locationOfGoodsInDB);
+  });
+}
