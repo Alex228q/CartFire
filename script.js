@@ -30,12 +30,16 @@ addButton.addEventListener("click", () => {
 });
 
 onValue(goodsInDB, (snapshot) => {
-  clearShoppinngList();
+  if (snapshot.exists()) {
+    clearShoppinngList();
 
-  const goodsEntries = Object.entries(snapshot.val());
+    const goodsEntries = Object.entries(snapshot.val());
 
-  for (let i = 0; i < goodsEntries.length; i++) {
-    appendItemToSoppingList(goodsEntries[i]);
+    for (let i = 0; i < goodsEntries.length; i++) {
+      appendItemToSoppingList(goodsEntries[i]);
+    }
+  } else {
+    shoppingList.innerHTML = "No items here... yet";
   }
 });
 
